@@ -4,9 +4,9 @@
 
         <h1>{{ title }}</h1>
 
-        <PodcastsList :added="addedPodcast" @removePodcast="removePodcast"/>
+        <PodcastsList :added="addedPodcast"/>
 
-        <PodcastAdd @savePodcast="savePodcast" :removed="removing"/>
+        <PodcastAdd @savePodcast="savePodcast"/>
 
     </div>
 </template>
@@ -26,20 +26,13 @@ export default {
     return {
       title: 'Podcast',
       message: null,
-      addedPodcast: null,
-      removing: false
+      addedPodcast: null
     }
   },
   methods: {
     savePodcast: function (addedPodcast) {
       this.addedPodcast = addedPodcast;
-    },
-    removePodcast: function(){
-
-      this.removing = !this.removing;
-      console.log('removing', this.addedPodcast);
     }
-
   }
 }
 </script>

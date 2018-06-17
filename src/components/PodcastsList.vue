@@ -1,6 +1,6 @@
 <template>
     <div>
-        podcasts list
+        <h2>podcasts list</h2>
 
         <ul v-if="savedPodcasts.length">
           <li v-for="(savedPodcast, key) in savedPodcasts" :key="key">

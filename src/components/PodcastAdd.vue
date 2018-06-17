@@ -3,21 +3,21 @@
 
       <PodcastsSuggested @suggestPodcast="suggestPodcast"/>
 
-        <input type="text" v-model="podcastUrl">
+      <input type="text" v-model="podcastUrl">
 
-        <button v-on:click="getItem">Add podcast</button>
+      <button v-on:click="getPodcast">Add podcast</button>
 
-        <section v-if="podcast">
-            <h4>{{podcast.title}}</h4>
-            <button v-if="podcastUrl" v-on:click="$emit('savePodcast', podcast)">Save</button>
-            <button v-if="podcastUrl" v-on:click="removePodcast">Remove</button>
+      <section v-if="loadedPodcast">
+          <h4>{{loadedPodcast.title}}</h4>
+          <button v-if="podcastUrl" v-on:click="$emit('savePodcast', loadedPodcast)">Save</button>
+          <button v-if="podcastUrl" v-on:click="removeLoadedPodcast">Remove</button>
 
-            <ul>
-                <li v-for="episode in podcast.item" :key="episode.guid.content">
-                    {{episode.title}}
-                </li>
-            </ul>
-        </section>
+          <ul>
+              <li v-for="episode in loadedPodcast.item" :key="episode.guid.content">
+                  {{episode.title}}
+              </li>
+          </ul>
+      </section>
     </div>
 </template>
 
@@ -33,21 +33,14 @@ export default {
   data () {
     return {
       podcastUrl: 'atp.fm/episodes?format=rss',
-      podcast: null
+      loadedPodcast: null
     }
   },
-  props: ['removed'],
   watch: {
-    removed: function() {
 
-      console.log('removed')
-
-      this.podcast = {}
-      this.podcastUrl = ''
-    }
   },
   methods: {
-    getItem () {
+    getPodcast () {
       console.log('podcastUrl', this.podcastUrl);
 
       if(this.podcastUrl === ''){
@@ -56,14 +49,15 @@ export default {
       }
 
       this.$http.get('https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D"' + this.podcastUrl + '"&format=json').then(response => {
-        this.podcast = response.body.query.results.rss.channel
-        console.log('loaded podcast', this.podcast);
+        this.loadedPodcast = response.body.query.results.rss.channel
+        console.log('loadedPodcast', this.loadedPodcast);
+
       }, response => {
         // error callback
       })
     },
-    removePodcast(){
-      this.podcast = {}
+    removeLoadedPodcast(){
+      this.loadedPodcast = {}
       this.podcastUrl = ''
     },
     suggestPodcast(suggestedPodcast){
@@ -71,7 +65,7 @@ export default {
 
       this.podcastUrl = suggestedPodcast.url
 
-      this.getItem()
+      this.getPodcast()
 
     }
   }

@@ -2,7 +2,7 @@
     <div>
 
         <section v-if="suggestedPodcasts.length">
-
+            <h2>Suggested podcasts</h2>
             <ul>
                 <li v-for="(suggestedPodcast, key) in suggestedPodcasts" :key="key">
                     <button v-on:click="$emit('suggestPodcast', suggestedPodcast)">{{suggestedPodcast.title}}</button>
