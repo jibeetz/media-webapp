@@ -1,22 +1,22 @@
 <template>
-    <div>
+    <div class="podcast-add" :class="{ open: isOpen }">
 
       <PodcastsSuggested @suggestPodcast="suggestPodcast"/>
 
       <input type="text" v-model="podcastUrl">
 
-      <button v-on:click="getPodcast">Add podcast</button>
+      <button v-on:click="loadPodcast">Load podcast</button>
 
       <section v-if="loadedPodcast">
           <h4>{{loadedPodcast.title}}</h4>
-          <button v-if="podcastUrl" v-on:click="$emit('savePodcast', loadedPodcast)">Save</button>
-          <button v-if="podcastUrl" v-on:click="removeLoadedPodcast">Remove</button>
+          <button v-if="podcastUrl" v-on:click="$emit('addPodcast', {loadedPodcast})">Add podcast</button>
+          <button v-if="podcastUrl" v-on:click="unloadPodcast">Cancel</button>
 
-          <ul>
+          <!-- <ul>
               <li v-for="episode in loadedPodcast.item" :key="episode.guid.content">
                   {{episode.title}}
               </li>
-          </ul>
+          </ul> -->
       </section>
     </div>
 </template>
@@ -33,14 +33,21 @@ export default {
   data () {
     return {
       podcastUrl: 'atp.fm/episodes?format=rss',
-      loadedPodcast: null
+      loadedPodcast: null,
+      isOpen: false
     }
   },
-  watch: {
 
+  props: ['open'],
+  watch: {
+    open: function(isAddOpen) {
+      console.log('isAddOpen', isAddOpen);
+      this.isOpen = isAddOpen;
+    }
   },
+
   methods: {
-    getPodcast () {
+    loadPodcast () {
       console.log('podcastUrl', this.podcastUrl);
 
       if(this.podcastUrl === ''){
@@ -56,7 +63,7 @@ export default {
         // error callback
       })
     },
-    removeLoadedPodcast(){
+    unloadPodcast(){
       this.loadedPodcast = {}
       this.podcastUrl = ''
     },
@@ -65,7 +72,7 @@ export default {
 
       this.podcastUrl = suggestedPodcast.url
 
-      this.getPodcast()
+      this.loadPodcast()
 
     }
   }
@@ -73,4 +80,15 @@ export default {
 </script>
 
 <style scoped>
+
+.podcast-add{
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 1s;
+}
+
+.podcast-add.open{
+  max-height: 1000px;
+}
+
 </style>

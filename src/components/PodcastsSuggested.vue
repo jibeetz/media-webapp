@@ -26,8 +26,12 @@ export default {
                 url: 'atp.fm/episodes?format=rss'
                 },
                 {
+                    title: 'Joe Rogan',
+                    url: 'http://podcasts.joerogan.net/feed'
+                },
+                {
                     title: 'L\'after',
-                    url: 'https://rmcsport.bfmtv.com/rss/emission/after-foot/'
+                    url: 'https://podcast.rmc.fr/channel59/RMCInfochannel59.xml'
                 }
             ]
         }

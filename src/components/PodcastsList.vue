@@ -4,7 +4,16 @@
 
         <ul v-if="savedPodcasts.length">
           <li v-for="(savedPodcast, key) in savedPodcasts" :key="key">
-            {{savedPodcast}}
+            {{savedPodcast.title}}
+            <button v-on:click="removePodcast(savedPodcast)">Remove</button>
+            <button v-on:click="showEpisodes(savedPodcast)">Show episodes</button>
+            <button v-on:click="updatePodcast(savedPodcast)">Update podcast</button>
+          </li>
+        </ul>
+
+        <ul v-if="selectedPodcast !== null">
+          <li v-for="(episode, key) in selectedPodcast.item" :key="key">
+            {{episode.title}}
           </li>
         </ul>
     </div>
@@ -15,15 +24,15 @@ export default {
   name: 'podcasts-list',
   data () {
     return {
-      savedPodcasts: []
+      savedPodcasts: [],
+      selectedPodcast: null
     }
   },
 
   props: ['added'],
   watch: {
     added: function(addedPodcast) {
-      console.log('addedPodcast ', addedPodcast)
-
+      console.log('watch added', addedPodcast);
       this.savePodcast(addedPodcast)
     }
   },
@@ -31,7 +40,9 @@ export default {
   methods: {
     savePodcast: function(addedPodcast){
 
-      if(this.savedPodcasts.indexOf(addedPodcast.link) != -1){
+      console.log('addedPodcast', addedPodcast);
+
+      if(this.savedPodcasts.indexOf(addedPodcast.loadedPodcast) != -1){
 
           console.log('already saved');
 
@@ -41,22 +52,35 @@ export default {
           return;
         }
 
-        this.savedPodcasts.push(addedPodcast.link);
+        this.savedPodcasts.push(addedPodcast.loadedPodcast);
 
         localStorage.setItem('podcastsList', JSON.stringify(this.savedPodcasts));
 
         // this.$emit('removePodcast');
+    },
+    removePodcast: function(podcast){
+      console.log('podcast to remove', podcast);
+      this.savedPodcasts
+      var index = this.savedPodcasts.indexOf(podcast);
+      if (index > -1) {
+        this.savedPodcasts.splice(index, 1);
+
+        localStorage.setItem('podcastsList', JSON.stringify(this.savedPodcasts));
+      }
+
+    },
+    showEpisodes: function (podcast){
+      console.log('showEpisodes', podcast);
+      this.selectedPodcast = podcast;
+    },
+    updatePodcast: function(podcast){
+
     }
   },
   mounted: function () {
 
-    let savedPodcasts = localStorage.getItem('podcastsList');
+    this.savedPodcasts = (localStorage.getItem('podcastsList')) ? JSON.parse(localStorage.getItem('podcastsList')) : [];
 
-    console.log('savedePodcasts', savedPodcasts);
-
-    savedPodcasts = (localStorage.getItem('podcastsList')) ? JSON.parse(savedPodcasts) : [];
-
-    this.savedPodcasts = savedPodcasts
   }
 }
 </script>

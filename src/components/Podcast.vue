@@ -4,9 +4,11 @@
 
         <h1>{{ title }}</h1>
 
-        <PodcastsList :added="addedPodcast"/>
+        <button v-on:click="isAddOpen = !isAddOpen">toggle Add</button>
 
-        <PodcastAdd @savePodcast="savePodcast"/>
+        <PodcastAdd @addPodcast="addPodcast" :open="isAddOpen"/>
+
+        <PodcastsList :added="addedPodcast"/>
 
     </div>
 </template>
@@ -26,11 +28,12 @@ export default {
     return {
       title: 'Podcast',
       message: null,
-      addedPodcast: null
+      addedPodcast: null,
+      isAddOpen: false
     }
   },
   methods: {
-    savePodcast: function (addedPodcast) {
+    addPodcast: function (addedPodcast) {
       this.addedPodcast = addedPodcast;
     }
   }
