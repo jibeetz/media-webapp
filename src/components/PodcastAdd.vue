@@ -24,6 +24,7 @@
 <script>
 
 import PodcastsSuggested from '@/components/PodcastsSuggested'
+import Data from '../services/Data'
 
 export default {
   name: 'podcast-add',
@@ -55,10 +56,9 @@ export default {
         return;
       }
 
-      this.$http.get('https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D"' + this.podcastUrl + '"&format=json').then(response => {
-        this.loadedPodcast = response.body.query.results.rss.channel
-        console.log('loadedPodcast', this.loadedPodcast);
-
+      Data.getPodcast(this.podcastUrl).then(response => {
+        this.loadedPodcast = response.data.query.results.rss.channel
+        this.loadedPodcast.url = this.podcastUrl
       }, response => {
         // error callback
       })
@@ -88,7 +88,7 @@ export default {
 }
 
 .podcast-add.open{
-  max-height: 1000px;
+  max-height: 300px;
 }
 
 </style>

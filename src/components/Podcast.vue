@@ -2,7 +2,7 @@
     <div>
         <div>{{message}}</div>
 
-        <h1>{{ title }}</h1>
+        <h1>{{title}}</h1>
 
         <button v-on:click="isAddOpen = !isAddOpen">toggle Add</button>
 
@@ -26,7 +26,7 @@ export default {
 	},
   data () {
     return {
-      title: 'Podcast',
+      title: 'Media app',
       message: null,
       addedPodcast: null,
       isAddOpen: false

@@ -3,12 +3,9 @@
 
 import Vue from 'vue'
 import App from './App'
-import Resource from 'vue-resource'
 // import store from './vuex/store'
 
 Vue.config.productionTip = false
-
-Vue.use(Resource)
 
 /* eslint-disable no-new */
 new Vue({

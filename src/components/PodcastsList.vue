@@ -20,12 +20,16 @@
 </template>
 
 <script>
+
+import Data from '../services/Data'
+
 export default {
   name: 'podcasts-list',
   data () {
     return {
       savedPodcasts: [],
-      selectedPodcast: null
+      selectedPodcast: null,
+      updatedPodcast: null
     }
   },
 
@@ -59,8 +63,7 @@ export default {
         // this.$emit('removePodcast');
     },
     removePodcast: function(podcast){
-      console.log('podcast to remove', podcast);
-      this.savedPodcasts
+
       var index = this.savedPodcasts.indexOf(podcast);
       if (index > -1) {
         this.savedPodcasts.splice(index, 1);
@@ -75,6 +78,30 @@ export default {
     },
     updatePodcast: function(podcast){
 
+      Data.getPodcast(podcast.url).then(response => {
+
+        this.updatedPodcast = response.data.query.results.rss.channel
+
+        this.comparePodcasts(podcast, this.updatedPodcast);
+      })
+
+    },
+    comparePodcasts: function(currentPodcast, newPodcast){
+
+      let currentPodcastBuildDate = new Date(currentPodcast.lastBuildDate)
+      let newPodcastBuildDate = new Date(newPodcast.lastBuildDate)
+
+      console.log('currentPodcastBuildDate', currentPodcastBuildDate);
+      console.log('newPodcastBuildDate', newPodcastBuildDate);
+
+      if(+currentPodcastBuildDate == +newPodcastBuildDate){
+        console.log('same', );
+      }
+
+      if(currentPodcastBuildDate < newPodcastBuildDate){
+        console.log('diff', );
+
+      }
     }
   },
   mounted: function () {
