@@ -11,9 +11,11 @@
           </li>
         </ul>
 
+        <button v-if="selectedPodcast !== null" v-on:click="hideEpisodes()">Hide episodes</button>
         <ul v-if="selectedPodcast !== null">
           <li v-for="(episode, key) in selectedPodcast.item" :key="key">
             {{episode.title}}
+            <button v-on:click="$emit('addEpisode', {episode})">Add episode</button>
           </li>
         </ul>
     </div>
@@ -44,9 +46,9 @@ export default {
   methods: {
     savePodcast: function(addedPodcast){
 
-      console.log('addedPodcast', addedPodcast);
+      let checkIfAlreadySaved = this.savedPodcasts.filter(savedPodcast => savedPodcast.url === addedPodcast.loadedPodcast.url)
 
-      if(this.savedPodcasts.indexOf(addedPodcast.loadedPodcast) != -1){
+      if(checkIfAlreadySaved.length !== 0){
 
           console.log('already saved');
 
@@ -69,6 +71,10 @@ export default {
         this.savedPodcasts.splice(index, 1);
 
         localStorage.setItem('podcastsList', JSON.stringify(this.savedPodcasts));
+
+        if(this.selectedPodcast === podcast){
+          this.selectedPodcast = null
+        }
       }
 
     },
@@ -76,11 +82,19 @@ export default {
       console.log('showEpisodes', podcast);
       this.selectedPodcast = podcast;
     },
+    hideEpisodes: function(){
+      this.selectedPodcast = null;
+    },
     updatePodcast: function(podcast){
 
       Data.getPodcast(podcast.url).then(response => {
 
         this.updatedPodcast = response.data.query.results.rss.channel
+        this.updatedPodcast.lastBuildDate = 'Wed, 20 Jun 2018 03:11:46 +0000'
+        this.updatedPodcast.item[0].title =  'updatedeaa'
+        this.updatedPodcast.url =  podcast.url
+
+        console.log('updatedPodcast', response.data.query.results.rss.channel);
 
         this.comparePodcasts(podcast, this.updatedPodcast);
       })
@@ -94,12 +108,22 @@ export default {
       console.log('currentPodcastBuildDate', currentPodcastBuildDate);
       console.log('newPodcastBuildDate', newPodcastBuildDate);
 
-      if(+currentPodcastBuildDate == +newPodcastBuildDate){
+      if(currentPodcastBuildDate.getTime() == newPodcastBuildDate.getTime()){
         console.log('same', );
       }
 
       if(currentPodcastBuildDate < newPodcastBuildDate){
         console.log('diff', );
+
+        let podcastToUpdateIndex = this.savedPodcasts.indexOf(currentPodcast)
+
+        this.savedPodcasts.splice(podcastToUpdateIndex, 1, newPodcast);
+
+        localStorage.setItem('podcastsList', JSON.stringify(this.savedPodcasts));
+
+        if(this.selectedPodcast === currentPodcast){
+          this.selectedPodcast = newPodcast
+        }
 
       }
     }

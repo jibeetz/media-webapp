@@ -10,6 +10,8 @@
 
         <PodcastsList :added="addedPodcast"/>
 
+        <Playlists/>
+
     </div>
 </template>
 
@@ -17,12 +19,14 @@
 
 import PodcastsList from '@/components/PodcastsList'
 import PodcastAdd from '@/components/PodcastAdd'
+import Playlists from '@/components/Playlists'
 
 export default {
   name: 'Podcast',
   components: {
     PodcastsList,
-    PodcastAdd
+    PodcastAdd,
+    Playlists
 	},
   data () {
     return {
