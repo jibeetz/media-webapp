@@ -8,6 +8,8 @@
 - Backward & forward buttons on Player
 - Youtube API
 - Soundcloud
+- Multiple playlists
+- Youtube opml
 
 ## Build Setup
 
