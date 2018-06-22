@@ -8,9 +8,11 @@
 
         <PodcastAdd @addPodcast="addPodcast" :open="isAddOpen"/>
 
-        <PodcastsList :added="addedPodcast"/>
+        <PodcastsList @addEpisode="addEpisode" :added="addedPodcast"/>
 
-        <Playlists/>
+        <Playlists :addedEpisode="addedEpisode"/>
+
+        <Player/>
 
     </div>
 </template>
@@ -20,25 +22,31 @@
 import PodcastsList from '@/components/PodcastsList'
 import PodcastAdd from '@/components/PodcastAdd'
 import Playlists from '@/components/Playlists'
+import Player from '@/components/Player'
 
 export default {
   name: 'Podcast',
   components: {
     PodcastsList,
     PodcastAdd,
-    Playlists
+    Playlists,
+    Player
 	},
   data () {
     return {
       title: 'Media app',
       message: null,
       addedPodcast: null,
+      addedEpisode: null,
       isAddOpen: false
     }
   },
   methods: {
     addPodcast: function (addedPodcast) {
       this.addedPodcast = addedPodcast;
+    },
+    addEpisode: function(addedEpisode){
+      this.addedEpisode = addedEpisode
     }
   }
 }
