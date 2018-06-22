@@ -1,5 +1,5 @@
 <template>
-    <div class="podcast-add" :class="{ open: isOpen }">
+    <div class="podcast-add" :class="{'open': isOpen}">
 
       <PodcastsSuggested @suggestPodcast="suggestPodcast"/>
 
@@ -17,6 +17,7 @@
                   {{episode.title}}
               </li>
           </ul> -->
+
       </section>
     </div>
 </template>
@@ -39,15 +40,22 @@ export default {
     }
   },
 
+
   props: ['open'],
   watch: {
     open: function(isAddOpen) {
       console.log('isAddOpen', isAddOpen);
-      this.isOpen = isAddOpen;
-    }
+      this.updateState(isAddOpen);
+    },
+    immediate: true
   },
 
   methods: {
+    updateState(isAddOpen){
+
+      this.isOpen = isAddOpen;
+      this.$forceUpdate();
+    },
     loadPodcast () {
       console.log('podcastUrl', this.podcastUrl);
 
@@ -57,8 +65,26 @@ export default {
       }
 
       Data.getPodcast(this.podcastUrl).then(response => {
-        this.loadedPodcast = response.data.query.results.rss.channel
+
+        console.log('response', response.data.query.results);
+
+        this.loadedPodcast = {};
+
+        if(response.data.query.results.feed){
+          this.loadedPodcast = response.data.query.results.feed
+          this.loadedPodcast.type = 'yt'
+          this.loadedPodcast.lastBuildDate = response.data.query.results.feed.published
+          this.loadedPodcast.item = response.data.query.results.feed.entry
+        }
+
+        if(response.data.query.results.rss && response.data.query.results.rss.channel){
+          this.loadedPodcast = response.data.query.results.rss.channel
+          this.loadedPodcast.type = 'default'
+        }
+
         this.loadedPodcast.url = this.podcastUrl
+
+
       }, response => {
         // error callback
       })
@@ -75,6 +101,11 @@ export default {
       this.loadPodcast()
 
     }
+  },
+  computed: {
+
+  },
+  mounted: function() {
   }
 }
 </script>
@@ -84,11 +115,11 @@ export default {
 .podcast-add{
   max-height: 0;
   overflow: hidden;
-  transition: max-height 1s;
+  transition: max-height 0.5s;
 }
 
 .podcast-add.open{
-  max-height: 300px;
+  max-height: 500px;
 }
 
 </style>

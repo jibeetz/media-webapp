@@ -16,6 +16,7 @@
           <li v-for="(episode, key) in selectedPodcast.item" :key="key">
             {{episode.title}}
             <button v-on:click="$emit('addEpisode', {episode})">Add episode</button>
+            <button v-on:click="$emit('playEpisode', {episode})">Play episode</button>
           </li>
         </ul>
     </div>
@@ -89,7 +90,19 @@ export default {
 
       Data.getPodcast(podcast.url).then(response => {
 
-        this.updatedPodcast = response.data.query.results.rss.channel
+        if(response.data.query.results.feed){
+          this.updatedPodcast = response.data.query.results.feed
+          this.updatedPodcast.type = 'yt'
+          this.updatedPodcast.lastBuildDate = response.data.query.results.feed.published
+          this.updatedPodcast.item = response.data.query.results.feed.entry
+        }
+
+        if(response.data.query.results.rss && response.data.query.results.rss.channel){
+          this.updatedPodcast = response.data.query.results.rss.channel
+          this.updatedPodcast.type = 'default'
+
+        }
+
         this.updatedPodcast.lastBuildDate = 'Wed, 20 Jun 2018 03:11:46 +0000'
         this.updatedPodcast.item[0].title =  'updatedeaa'
         this.updatedPodcast.url =  podcast.url

@@ -1,6 +1,13 @@
-# vue_project
+# Media manager
 
-> Vue Discovery
+- Podcast manager
+
+## To do
+
+- Design
+- Backward & forward buttons on Player
+- Youtube API
+- Soundcloud
 
 ## Build Setup
 

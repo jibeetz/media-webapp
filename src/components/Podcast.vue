@@ -3,16 +3,20 @@
         <div>{{message}}</div>
 
         <h1>{{title}}</h1>
-
-        <button v-on:click="isAddOpen = !isAddOpen">toggle Add</button>
+        isAddOpen: {{isAddOpen}}
+        <button v-on:click="isAddOpen = !isAddOpen">
+          <span v-if="!isAddOpen">Show</span>
+          <span v-if="isAddOpen">Hide</span>
+          List
+        </button>
 
         <PodcastAdd @addPodcast="addPodcast" :open="isAddOpen"/>
 
-        <PodcastsList @addEpisode="addEpisode" :added="addedPodcast"/>
+        <PodcastsList @addEpisode="addEpisode" :added="addedPodcast" @playEpisode="playEpisode"/>
 
-        <Playlists :addedEpisode="addedEpisode"/>
+        <Playlists :addedEpisode="addedEpisode" @playEpisode="playEpisode"/>
 
-        <Player/>
+        <Player :playedEpisode="playedEpisode"/>
 
     </div>
 </template>
@@ -38,6 +42,7 @@ export default {
       message: null,
       addedPodcast: null,
       addedEpisode: null,
+      playedEpisode: null,
       isAddOpen: false
     }
   },
@@ -47,6 +52,9 @@ export default {
     },
     addEpisode: function(addedEpisode){
       this.addedEpisode = addedEpisode
+    },
+    playEpisode: function(playedEpisode){
+      this.playedEpisode = playedEpisode
     }
   }
 }
