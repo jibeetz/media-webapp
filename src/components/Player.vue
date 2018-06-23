@@ -8,8 +8,9 @@
         <h3 v-if="loadedEpisode">{{loadedEpisode.title}}</h3>
         {{playerView}}
         <div v-if="loadedEpisode && playerView === 'yt'">
-            {{loadedEpisode.link.href}}
-            <iframe width="560" height="315" v-bind:src="loadedEpisode.link.href" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
+
+            <div id="playere"></div>
 
         </div>
 
@@ -70,6 +71,11 @@ export default {
             console.log('episode', episode);
             if(episode.id && episode.id.substring(0, 2) === 'yt'){
                 this.playerView = 'yt'
+
+                this.$nextTick(function () {
+                    this.loadYoutubeVideo(episode);
+                })
+
                 return;
             }
 
@@ -87,12 +93,43 @@ export default {
             this.loadedEpisode = null
             localStorage.setItem('loadedEpisode', null);
             this.playerView = null;
+        },
+        setupYoutube: function(){
+
+            let tag = document.createElement('script');
+            tag.src = "https://www.youtube.com/iframe_api";
+            let firstScriptTag = document.getElementsByTagName('script')[0];
+            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        },
+        loadYoutubeVideo: function(episode){
+
+            let player;
+
+            player = new YT.Player('playere', {
+                height: '360',
+                width: '640',
+                videoId: episode.videoId,
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+
+            function onPlayerReady(event) {
+                // event.target.playVideo();
+            }
+
+            function onPlayerStateChange() {
+            }
         }
     },
   mounted: function () {
 
     this.loadedEpisode = (localStorage.getItem('loadedEpisode')) ? JSON.parse(localStorage.getItem('loadedEpisode')) : null;
     console.log('loadedEpisode', this.loadedEpisode);
+
+    this.setupYoutube();
   }
 }
 </script>
