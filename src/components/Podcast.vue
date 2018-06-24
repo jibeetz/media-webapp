@@ -1,5 +1,7 @@
 <template>
-    <div>
+    <div class="app-container">
+
+      <header class="header">
         <div>{{message}}</div>
 
         <h1>{{title}}</h1>
@@ -12,11 +14,23 @@
 
         <PodcastAdd @addPodcast="addPodcast" :open="isAddOpen"/>
 
+      </header>
+
+      <div class="left-pane">
+
         <PodcastsList @addEpisode="addEpisode" :added="addedPodcast" @playEpisode="playEpisode"/>
 
         <Playlists :addedEpisode="addedEpisode" @playEpisode="playEpisode"/>
 
+      </div>
+
+      <div class="right-pane">
+
         <Player :playedEpisode="playedEpisode"/>
+
+      </div>
+
+
 
     </div>
 </template>
@@ -62,6 +76,29 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
+.app-container{
+  display: grid;
+  height: 100vh;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+  "header header"
+  "left-pane right-pane"
+}
+
+.header {
+  grid-area: header;
+}
+
+.left-pane {
+  grid-area: left-pane;
+}
+
+.right-pane {
+  grid-area: right-pane;
+}
+
 h1,
 h2 {
   font-weight: normal;
