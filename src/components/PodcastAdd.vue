@@ -1,24 +1,30 @@
 <template>
-    <div class="podcast-add" :class="{'open': isOpen}">
 
-      <PodcastsSuggested @suggestPodcast="suggestPodcast"/>
+    <div>
 
-      <input type="text" v-model="podcastUrl">
+      <div class="podcast_add" :style="{maxHeight: podcastHeight  + 'px'}">
 
-      <button v-on:click="loadPodcast">Load podcast</button>
+      <div class="podcast_add-container">
+        <PodcastsSuggested @suggestPodcast="suggestPodcast"/>
 
-      <section v-if="loadedPodcast">
-          <h4>{{loadedPodcast.title}}</h4>
-          <button v-if="podcastUrl" v-on:click="$emit('addPodcast', {loadedPodcast})">Add podcast</button>
-          <button v-if="podcastUrl" v-on:click="unloadPodcast">Cancel</button>
+        <input type="text" v-model="podcastUrl">
 
-          <!-- <ul>
-              <li v-for="episode in loadedPodcast.item" :key="episode.guid.content">
-                  {{episode.title}}
-              </li>
-          </ul> -->
+        <button v-on:click="loadPodcast">Load podcast</button>
 
-      </section>
+        <section v-if="loadedPodcast">
+            <h4>{{loadedPodcast.title}}</h4>
+            <button v-if="podcastUrl" v-on:click="$emit('addPodcast', {loadedPodcast})">Add podcast</button>
+            <button v-if="podcastUrl" v-on:click="unloadPodcast">Cancel</button>
+
+            <!-- <ul>
+                <li v-for="episode in loadedPodcast.item" :key="episode.guid.content">
+                    {{episode.title}}
+                </li>
+            </ul> -->
+
+        </section>
+      </div>
+    </div>
     </div>
 </template>
 
@@ -26,6 +32,7 @@
 
 import PodcastsSuggested from '@/components/PodcastsSuggested'
 import Data from '../services/Data'
+import OrganizeData from '../services/OrganizeData'
 
 export default {
   name: 'podcast-add',
@@ -36,28 +43,29 @@ export default {
     return {
       podcastUrl: 'atp.fm/episodes?format=rss',
       loadedPodcast: null,
-      isOpen: false
+      podcastHeight: 0,
+      podcastContainerHeight: 0
     }
   },
-
-
   props: ['open'],
   watch: {
-    open: function(isAddOpen) {
-      console.log('isAddOpen', isAddOpen);
-      this.updateState(isAddOpen);
-    },
-    immediate: true
+    open: {
+      immediate: true,
+      handler(isAddOpen) {
+        this.updateState(isAddOpen);
+      },
+    }
   },
-
   methods: {
     updateState(isAddOpen){
 
-      this.isOpen = isAddOpen;
-      this.$forceUpdate();
+      if(document.getElementsByClassName('podcast_add-container')[0])
+        this.podcastContainerHeight = document.getElementsByClassName('podcast_add-container')[0].clientHeight;
+
+      this.podcastHeight = (isAddOpen) ? this.podcastContainerHeight : 0;
+
     },
     loadPodcast () {
-      console.log('podcastUrl', this.podcastUrl);
 
       if(this.podcastUrl === ''){
         console.log('blank');
@@ -66,35 +74,26 @@ export default {
 
       Data.getPodcast(this.podcastUrl).then(response => {
 
-        console.log('response', response.data.query.results);
+        this.loadedPodcast = OrganizeData.set(response.data.query.results, this.podcastUrl);
 
-        this.loadedPodcast = {};
-
-        if(response.data.query.results.feed){
-          this.loadedPodcast = response.data.query.results.feed
-          this.loadedPodcast.type = 'yt'
-          this.loadedPodcast.lastBuildDate = response.data.query.results.feed.published
-          this.loadedPodcast.item = response.data.query.results.feed.entry
-        }
-
-        if(response.data.query.results.rss && response.data.query.results.rss.channel){
-          this.loadedPodcast = response.data.query.results.rss.channel
-          this.loadedPodcast.type = 'default'
-        }
-
-        this.loadedPodcast.url = this.podcastUrl
-
+        this.$nextTick(function() {
+          this.podcastHeight = document.getElementsByClassName('podcast_add-container')[0].clientHeight;
+        });
 
       }, response => {
         // error callback
       })
     },
+
     unloadPodcast(){
       this.loadedPodcast = {}
       this.podcastUrl = ''
+      this.$nextTick(function() {
+        this.podcastHeight = document.getElementsByClassName('podcast_add-container')[0].clientHeight;
+      });
     },
     suggestPodcast(suggestedPodcast){
-      console.log('suggestedPodcast', suggestedPodcast);
+      console.log('suggestedPeeodcast', suggestedPodcast);
 
       this.podcastUrl = suggestedPodcast.url
 
@@ -106,20 +105,19 @@ export default {
 
   },
   mounted: function() {
+
+    this.podcastContainerHeight = document.getElementsByClassName('podcast_add-container')[0].clientHeight;
+
   }
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 
-.podcast-add{
+.podcast_add{
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.5s;
-}
-
-.podcast-add.open{
-  max-height: 500px;
 }
 
 </style>

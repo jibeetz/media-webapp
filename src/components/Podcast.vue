@@ -5,11 +5,11 @@
         <div>{{message}}</div>
 
         <h1>{{title}}</h1>
-        isAddOpen: {{isAddOpen}}
         <button v-on:click="isAddOpen = !isAddOpen">
-          <span v-if="!isAddOpen">Show</span>
-          <span v-if="isAddOpen">Hide</span>
-          List
+           Add
+          <span v-if="!isAddOpen">+</span>
+          <span v-if="isAddOpen">-</span>
+
         </button>
 
         <PodcastAdd @addPodcast="addPodcast" :open="isAddOpen"/>
@@ -63,6 +63,7 @@ export default {
   methods: {
     addPodcast: function (addedPodcast) {
       this.addedPodcast = addedPodcast;
+      console.log('e', );
     },
     addEpisode: function(addedEpisode){
       this.addedEpisode = addedEpisode
@@ -74,8 +75,7 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style scoped lang="scss">
 
 .app-container{
   display: grid;
@@ -84,11 +84,23 @@ export default {
   grid-template-rows: auto 1fr;
   grid-template-areas:
   "header header"
-  "left-pane right-pane"
+  "left-pane left-pane"
+  "right-pane right-pane";
+
+  @media screen and (min-width: 769px) and(orientation: landscape){
+
+    grid-template-areas:
+    "header header"
+    "left-pane right-pane"
+  }
 }
 
 .header {
   grid-area: header;
+
+  &.dede{
+    color: red
+  }
 }
 
 .left-pane {
@@ -102,6 +114,7 @@ export default {
 h1,
 h2 {
   font-weight: normal;
+  margin: 0;
 }
 
 ul {

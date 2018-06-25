@@ -25,6 +25,7 @@
 <script>
 
 import Data from '../services/Data'
+import OrganizeData from '../services/OrganizeData'
 
 export default {
   name: 'podcasts-list',
@@ -90,24 +91,12 @@ export default {
 
       Data.getPodcast(podcast.url).then(response => {
 
-        if(response.data.query.results.feed){
-          this.updatedPodcast = response.data.query.results.feed
-          this.updatedPodcast.type = 'yt'
-          this.updatedPodcast.lastBuildDate = response.data.query.results.feed.published
-          this.updatedPodcast.item = response.data.query.results.feed.entry
-        }
-
-        if(response.data.query.results.rss && response.data.query.results.rss.channel){
-          this.updatedPodcast = response.data.query.results.rss.channel
-          this.updatedPodcast.type = 'default'
-
-        }
+        this.updatedPodcast = OrganizeData.set(response.data.query.results, this.podcastUrl);
 
         this.updatedPodcast.lastBuildDate = 'Wed, 20 Jun 2018 03:11:46 +0000'
         this.updatedPodcast.item[0].title =  'updatedeaa'
-        this.updatedPodcast.url =  podcast.url
 
-        console.log('updatedPodcast', response.data.query.results.rss.channel);
+        // console.log('updatedPodcast', response.data.query.results.rss.channel);
 
         this.comparePodcasts(podcast, this.updatedPodcast);
       })

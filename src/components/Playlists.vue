@@ -21,65 +21,59 @@
 </template>
 
 <script>
-
 export default {
-  name: 'Playlists',
-  components: {
-	},
-  data () {
+  name: "Playlists",
+  components: {},
+  data() {
     return {
-        playlists: [],
-        playlistModel: {
-            name: 'Default playlist',
-            id: 'default',
-            episodes: []
-        }
-    }
+      playlists: [],
+      playlistModel: {
+        name: "Default playlist",
+        id: "default",
+        episodes: []
+      }
+    };
   },
 
-  props: ['addedEpisode'],
+  props: ["addedEpisode"],
   watch: {
     addedEpisode: function(addedEpisode) {
-      this.saveEpisode(addedEpisode.episode)
+      this.saveEpisode(addedEpisode.episode);
     }
   },
 
   methods: {
-    saveEpisode: function (addedEpisode) {
-        if(this.playlists.length === 1){
+    saveEpisode: function(addedEpisode) {
+      if (this.playlists.length === 1) {
+        let checkIfAlreadySaved = this.playlists[0].episodes.filter(
+          savedPodcast => savedPodcast.guid === addedEpisode.guid
+        );
 
-            let checkIfAlreadySaved = this.playlists[0].episodes.filter(savedPodcast => savedPodcast.guid === addedEpisode.guid)
-
-            if (checkIfAlreadySaved.length === 0) {
-                this.playlists[0].episodes.push(addedEpisode);
-            }
+        if (checkIfAlreadySaved.length === 0) {
+          this.playlists[0].episodes.push(addedEpisode);
         }
+      }
 
-        localStorage.setItem('playlists', JSON.stringify(this.playlists));
-
+      localStorage.setItem("playlists", JSON.stringify(this.playlists));
     },
-    removeEpisode: function(playlist, episode){
+    removeEpisode: function(playlist, episode) {
+      var index = playlist.episodes.indexOf(episode);
 
-        var index = playlist.episodes.indexOf(episode);
+      if (index > -1) {
+        playlist.episodes.splice(index, 1);
 
-        if (index > -1) {
-            playlist.episodes.splice(index, 1);
-
-            localStorage.setItem('playlists', JSON.stringify(this.playlists));
-        }
+        localStorage.setItem("playlists", JSON.stringify(this.playlists));
+      }
     }
   },
-  mounted: function () {
+  mounted: function() {
+    if (!localStorage.getItem("playlists"))
+      localStorage.setItem("playlists", JSON.stringify([this.playlistModel]));
 
-    if(!localStorage.getItem('playlists'))
-        localStorage.setItem('playlists', JSON.stringify([this.playlistModel]));
-
-    this.playlists = JSON.parse(localStorage.getItem('playlists'));
-
+    this.playlists = JSON.parse(localStorage.getItem("playlists"));
   }
-}
+};
 </script>
 
 <style scoped>
-
 </style>
