@@ -8,7 +8,9 @@
 
                 <ul v-if="playlist.episodes.length !== 0">
                     <li v-for="(episode, ekey) in playlist.episodes" :key="ekey">
-                        {{episode.title}} <button v-on:click="removeEpisode(playlist, episode)">Remove from playlist</button>
+                        {{episode.title}}
+                        <button v-on:click="removeEpisode(playlist, episode)">Remove from playlist</button>
+                        <button v-on:click="$emit('playEpisode', {episode})">Play episode</button>
                     </li>
                 </ul>
 
@@ -73,8 +75,6 @@ export default {
         localStorage.setItem('playlists', JSON.stringify([this.playlistModel]));
 
     this.playlists = JSON.parse(localStorage.getItem('playlists'));
-
-    console.log('this.playlists', this.playlists);
 
   }
 }

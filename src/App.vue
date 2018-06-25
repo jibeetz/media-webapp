@@ -5,18 +5,17 @@
 </template>
 
 <script>
-
 import Podcast from '@/components/Podcast'
 
 export default {
   name: 'app',
   components: {
-		Podcast
-	}
+    Podcast
+  }
 }
 </script>
 
-<style>
+<style lang="scss">
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -24,5 +23,9 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+
+  &.dede{
+    color: red
+  }
 }
 </style>

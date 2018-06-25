@@ -1,18 +1,36 @@
 <template>
-    <div>
+    <div class="app-container">
+
+      <header class="header">
         <div>{{message}}</div>
 
         <h1>{{title}}</h1>
-
-        <button v-on:click="isAddOpen = !isAddOpen">toggle Add</button>
+        isAddOpen: {{isAddOpen}}
+        <button v-on:click="isAddOpen = !isAddOpen">
+          <span v-if="!isAddOpen">Show</span>
+          <span v-if="isAddOpen">Hide</span>
+          List
+        </button>
 
         <PodcastAdd @addPodcast="addPodcast" :open="isAddOpen"/>
 
-        <PodcastsList @addEpisode="addEpisode" :added="addedPodcast"/>
+      </header>
 
-        <Playlists :addedEpisode="addedEpisode"/>
+      <div class="left-pane">
 
-        <Player/>
+        <PodcastsList @addEpisode="addEpisode" :added="addedPodcast" @playEpisode="playEpisode"/>
+
+        <Playlists :addedEpisode="addedEpisode" @playEpisode="playEpisode"/>
+
+      </div>
+
+      <div class="right-pane">
+
+        <Player :playedEpisode="playedEpisode"/>
+
+      </div>
+
+
 
     </div>
 </template>
@@ -38,6 +56,7 @@ export default {
       message: null,
       addedPodcast: null,
       addedEpisode: null,
+      playedEpisode: null,
       isAddOpen: false
     }
   },
@@ -47,6 +66,9 @@ export default {
     },
     addEpisode: function(addedEpisode){
       this.addedEpisode = addedEpisode
+    },
+    playEpisode: function(playedEpisode){
+      this.playedEpisode = playedEpisode
     }
   }
 }
@@ -54,6 +76,29 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
+.app-container{
+  display: grid;
+  height: 100vh;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+  "header header"
+  "left-pane right-pane"
+}
+
+.header {
+  grid-area: header;
+}
+
+.left-pane {
+  grid-area: left-pane;
+}
+
+.right-pane {
+  grid-area: right-pane;
+}
+
 h1,
 h2 {
   font-weight: normal;

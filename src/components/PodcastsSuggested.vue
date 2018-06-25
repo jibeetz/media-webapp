@@ -32,6 +32,10 @@ export default {
                 {
                     title: 'L\'after',
                     url: 'https://podcast.rmc.fr/channel59/RMCInfochannel59.xml'
+                },
+                {
+                    title: 'PowerfulJRE',
+                    url: 'https://www.youtube.com/feeds/videos.xml?channel_id=UCzQUP1qoWDoEbmsQxvdjxgQ'
                 }
             ]
         }
