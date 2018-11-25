@@ -25,6 +25,14 @@ export default {
           url: "atp.fm/episodes?format=rss"
         },
         {
+          title: "Rogan Local",
+          url: "http://chezrevel.net/experiments/feed.xml"
+        },
+        {
+          title: "Jordan Peterson",
+          url: "https://feeds.blubrry.com/feeds/jordanbpeterson.xml"
+        },
+        {
           title: "Joe Rogan",
           url: "http://podcasts.joerogan.net/feed"
         },
@@ -34,8 +42,11 @@ export default {
         },
         {
           title: "PowerfulJRE",
-          url:
-            "https://www.youtube.com/feeds/videos.xml?channel_id=UCzQUP1qoWDoEbmsQxvdjxgQ"
+          url: "https://www.youtube.com/feeds/videos.xml?channel_id=UCzQUP1qoWDoEbmsQxvdjxgQ"
+        },
+        {
+          title: "Learn German",
+          url: "https://lgbp.podbean.com/feed/"
         }
       ]
     };

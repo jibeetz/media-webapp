@@ -25,7 +25,7 @@
 <script>
 
 import Data from '../services/Data'
-import OrganizeData from '../services/OrganizeData'
+import Normalize from '../services/Normalize'
 
 export default {
   name: 'podcasts-list',
@@ -81,7 +81,7 @@ export default {
 
     },
     showEpisodes: function (podcast){
-      console.log('showEpisodes', podcast);
+      // console.log('showEpisodes', podcast);
       this.selectedPodcast = podcast;
     },
     hideEpisodes: function(){
@@ -91,18 +91,16 @@ export default {
 
       Data.getPodcast(podcast.url).then(response => {
 
-        this.updatedPodcast = OrganizeData.set(response.data.query.results, this.podcastUrl);
-
-        this.updatedPodcast.lastBuildDate = 'Wed, 20 Jun 2018 03:11:46 +0000'
-        this.updatedPodcast.item[0].title =  'updatedeaa'
-
-        // console.log('updatedPodcast', response.data.query.results.rss.channel);
+        this.updatedPodcast = Normalize.set(response.data, this.podcastUrl);
 
         this.comparePodcasts(podcast, this.updatedPodcast);
       })
 
     },
     comparePodcasts: function(currentPodcast, newPodcast){
+
+      console.log('currentPodcast', currentPodcast);
+      console.log('newPodcast', newPodcast);
 
       let currentPodcastBuildDate = new Date(currentPodcast.lastBuildDate)
       let newPodcastBuildDate = new Date(newPodcast.lastBuildDate)
@@ -117,15 +115,17 @@ export default {
       if(currentPodcastBuildDate < newPodcastBuildDate){
         console.log('diff', );
 
-        let podcastToUpdateIndex = this.savedPodcasts.indexOf(currentPodcast)
+        currentPodcast.lastBuildDate = newPodcast.lastBuildDate
 
-        this.savedPodcasts.splice(podcastToUpdateIndex, 1, newPodcast);
+        // let podcastToUpdateIndex = this.savedPodcasts.indexOf(currentPodcast)
 
-        localStorage.setItem('podcastsList', JSON.stringify(this.savedPodcasts));
+        // this.savedPodcasts.splice(podcastToUpdateIndex, 1, newPodcast);
 
-        if(this.selectedPodcast === currentPodcast){
-          this.selectedPodcast = newPodcast
-        }
+        // localStorage.setItem('podcastsList', JSON.stringify(this.savedPodcasts));
+
+        // if(this.selectedPodcast === currentPodcast){
+        //   this.selectedPodcast = newPodcast
+        // }
 
       }
     }

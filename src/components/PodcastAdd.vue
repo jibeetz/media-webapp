@@ -32,7 +32,7 @@
 
 import PodcastsSuggested from '@/components/PodcastsSuggested'
 import Data from '../services/Data'
-import OrganizeData from '../services/OrganizeData'
+import Normalize from '../services/Normalize'
 
 export default {
   name: 'podcast-add',
@@ -74,7 +74,9 @@ export default {
 
       Data.getPodcast(this.podcastUrl).then(response => {
 
-        this.loadedPodcast = OrganizeData.set(response.data.query.results, this.podcastUrl);
+        this.loadedPodcast = Normalize.set(response.data, this.podcastUrl);
+
+        console.log('this.loadedPodcast', this.loadedPodcast);
 
         this.$nextTick(function() {
           this.podcastHeight = document.getElementsByClassName('podcast_add-container')[0].clientHeight;
