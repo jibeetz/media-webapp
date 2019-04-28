@@ -24,11 +24,10 @@
 
 <script>
 
-import Data from '../services/Data'
-import Normalize from '../services/Normalize'
+import Publication from '@/services/Publication'
 
 export default {
-  name: 'podcasts-list',
+  name: 'publications-list',
   data () {
     return {
       savedPodcasts: [],
@@ -89,33 +88,33 @@ export default {
     },
     updatePodcast: function(podcast){
 
-      Data.getPodcast(podcast.url).then(response => {
+      Publication.get(podcast.url).then(response => {
 
-        this.updatedPodcast = Normalize.set(response.data, this.podcastUrl);
+        this.updatedPodcast = Publication.standardize(response.data, this.podcastUrl);
 
-        this.comparePodcasts(podcast, this.updatedPodcast);
+        this.compareShows(podcast, this.updatedPodcast);
       })
 
     },
-    comparePodcasts: function(currentPodcast, newPodcast){
+    compareShows: function(currentPodcast, newPodcast){
 
       console.log('currentPodcast', currentPodcast);
       console.log('newPodcast', newPodcast);
 
-      let currentPodcastBuildDate = new Date(currentPodcast.lastBuildDate)
-      let newPodcastBuildDate = new Date(newPodcast.lastBuildDate)
+      let currentPodcastLastShowDate = new Date(currentPodcast.item[0].pubDate)
+      let newPodcastLastShowDate = new Date(newPodcast.item[0].pubDate)
 
-      console.log('currentPodcastBuildDate', currentPodcastBuildDate);
-      console.log('newPodcastBuildDate', newPodcastBuildDate);
+      console.log('currentPodcastLastShowDate', currentPodcastLastShowDate);
+      console.log('newPodcastLastShowDate', newPodcastLastShowDate);
 
-      if(currentPodcastBuildDate.getTime() == newPodcastBuildDate.getTime()){
+      if(currentPodcastLastShowDate.getTime() == newPodcastLastShowDate.getTime()){
         console.log('same', );
       }
 
-      if(currentPodcastBuildDate < newPodcastBuildDate){
+      if(currentPodcastLastShowDate < newPodcastLastShowDate){
         console.log('diff', );
 
-        currentPodcast.lastBuildDate = newPodcast.lastBuildDate
+        // currentPodcast.lastBuildDate = newPodcast.lastBuildDate
 
         // let podcastToUpdateIndex = this.savedPodcasts.indexOf(currentPodcast)
 

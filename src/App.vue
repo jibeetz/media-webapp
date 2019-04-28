@@ -1,16 +1,16 @@
 <template>
   <div id="app">
-    <Podcast/>
+    <Manager/>
   </div>
 </template>
 
 <script>
-import Podcast from '@/components/Podcast'
+import Manager from '@/components/Manager'
 
 export default {
   name: 'app',
   components: {
-    Podcast
+    Manager
   }
 }
 </script>

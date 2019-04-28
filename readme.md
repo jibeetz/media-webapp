@@ -1,7 +1,5 @@
 # Media manager
 
-- Podcast manager
-
 ## To do
 
 - Design

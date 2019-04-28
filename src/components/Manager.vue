@@ -12,41 +12,36 @@
 
         </button>
 
-        <PodcastAdd @addPodcast="addPodcast" :open="isAddOpen"/>
+        <AddPublication @addPodcast="addPodcast" :open="isAddOpen"/>
 
       </header>
 
       <div class="left-pane">
 
-        <PodcastsList @addEpisode="addEpisode" :added="addedPodcast" @playEpisode="playEpisode"/>
+        <Publications @addEpisode="addEpisode" :added="addedPodcast" @playEpisode="playEpisode"/>
 
         <Playlists :addedEpisode="addedEpisode" @playEpisode="playEpisode"/>
 
       </div>
 
       <div class="right-pane">
-
         <Player :playedEpisode="playedEpisode"/>
-
       </div>
-
-
-
     </div>
 </template>
 
 <script>
 
-import PodcastsList from '@/components/PodcastsList'
-import PodcastAdd from '@/components/PodcastAdd'
+import Publications from '@/components/Publications/List'
+import AddPublication from '@/components/Publications/Add'
 import Playlists from '@/components/Playlists'
 import Player from '@/components/Player'
 
 export default {
-  name: 'Podcast',
+  name: 'manager',
   components: {
-    PodcastsList,
-    PodcastAdd,
+    Publications,
+    AddPublication,
     Playlists,
     Player
 	},
@@ -63,7 +58,6 @@ export default {
   methods: {
     addPodcast: function (addedPodcast) {
       this.addedPodcast = addedPodcast;
-      console.log('e', );
     },
     addEpisode: function(addedEpisode){
       this.addedEpisode = addedEpisode
@@ -78,25 +72,10 @@ export default {
 <style scoped lang="scss">
 
 .app-container{
-  display: grid;
-  height: 100vh;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto 1fr;
-  grid-template-areas:
-  "header header"
-  "left-pane left-pane"
-  "right-pane right-pane";
 
-  @media screen and (min-width: 769px) and(orientation: landscape){
-
-    grid-template-areas:
-    "header header"
-    "left-pane right-pane"
-  }
 }
 
 .header {
-  grid-area: header;
 
   &.dede{
     color: red
@@ -104,11 +83,9 @@ export default {
 }
 
 .left-pane {
-  grid-area: left-pane;
 }
 
 .right-pane {
-  grid-area: right-pane;
 }
 
 h1,

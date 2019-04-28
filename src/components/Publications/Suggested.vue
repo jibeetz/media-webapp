@@ -1,11 +1,11 @@
 <template>
     <div>
 
-        <section v-if="suggestedPodcasts.length">
+        <section v-if="suggestedPublications.length">
             <h2>Suggested podcasts</h2>
             <ul>
-                <li v-for="(suggestedPodcast, key) in suggestedPodcasts" :key="key">
-                    <button v-on:click="$emit('suggestPodcast', suggestedPodcast)">{{suggestedPodcast.title}}</button>
+                <li v-for="(suggestedPublication, key) in suggestedPublications" :key="key">
+                    <button v-on:click="$emit('suggestPodcast', suggestedPublication)">{{suggestedPublication.title}}</button>
                 </li>
             </ul>
 
@@ -16,21 +16,21 @@
 
 <script>
 export default {
-  name: "podcast-suggested",
+  name: "suggested-publications",
   data() {
     return {
-      suggestedPodcasts: [
+      suggestedPublications: [
         {
           title: "atp",
           url: "atp.fm/episodes?format=rss"
         },
         {
           title: "Rogan Local",
-          url: "http://chezrevel.net/experiments/feed.xml"
+          url: "http://aweso.me/experiments/feed.xml"
         },
         {
           title: "Jordan Peterson",
-          url: "https://feeds.blubrry.com/feeds/jordanbpeterson.xml"
+          url: "https://rss.art19.com/the-jordan-b-peterson-podcast"
         },
         {
           title: "Joe Rogan",
@@ -43,10 +43,6 @@ export default {
         {
           title: "PowerfulJRE",
           url: "https://www.youtube.com/feeds/videos.xml?channel_id=UCzQUP1qoWDoEbmsQxvdjxgQ"
-        },
-        {
-          title: "Learn German",
-          url: "https://lgbp.podbean.com/feed/"
         }
       ]
     };
