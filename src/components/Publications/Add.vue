@@ -1,10 +1,16 @@
 <template>
 
-  <div v-show="isAddOpen">
-
-    <div class="podcast_add">
+    <div class="podcast_add" v-bind:class="{ open: isAddOpen }">
 
     <div class="podcast_add-container">
+
+        <button class="btn-add" v-on:click="$emit('closeAddPanel', isAddOpen)">
+           Add
+          <span v-if="!isAddOpen">+</span>
+          <span v-if="isAddOpen">-</span>
+
+        </button>
+
       <SuggestedPublications @suggestPodcast="suggestPodcast"/>
 
       <input type="text" v-model="podcastUrl">
@@ -20,13 +26,13 @@
           </button>
           <button v-if="podcastUrl" v-on:click="unloadPodcast">Cancel</button>
 
-          <ul v-if="podcastUrl && loadedPodcast && previewedEpisodes[convertToSlug(loadedPodcast.title)]">
+          <ul class="suggested" v-if="podcastUrl && loadedPodcast && previewedEpisodes[convertToSlug(loadedPodcast.title)]">
             <li v-for="(episode, epdkey) in loadedPodcast.item" :key="epdkey">{{episode.title}}</li>
           </ul>
 
       </section>
     </div>
-  </div>
+
   </div>
 </template>
 
@@ -69,9 +75,7 @@ export default {
       }
 
       Publication.get(this.podcastUrl).then(response => {
-
         this.loadedPodcast = Publication.standardize(response.data, this.podcastUrl);
-
       }, response => {
         // error callback
       })
@@ -112,8 +116,31 @@ export default {
 
 <style scoped lang="scss">
 
-.podcast_add{
-  transition: max-height 0.5s;
+.podcast_add {
+  transition: all 0.3s;
+  position: fixed;
+	top: -100vh;
+  left: 0;
+	height: calc(100vh - 30px);
+	background: #fff;
+	width: 50%;
+  padding: 15px;
+  overflow: hidden;
+
+  @media screen  and (max-width: 768px)  {
+    width: 100%;
+  }
+
+  &.open {
+    top: 0;
+  }
+
+  .suggested {
+    overflow: scroll;
+	  height: 69vh;
+	  margin: 0;
+  }
+
 }
 
 </style>

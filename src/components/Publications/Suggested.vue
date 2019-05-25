@@ -22,7 +22,7 @@ export default {
       suggestedPublications: [
         {
           title: "atp",
-          url: "atp.fm/episodes?format=rss"
+          url: "https://atp.fm/episodes?format=rss"
         },
         {
           title: "Rogan Local",

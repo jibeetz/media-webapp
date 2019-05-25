@@ -62,6 +62,8 @@ export default {
         this.savedPodcasts.push(addedPodcast.loadedPodcast);
 
         localStorage.setItem('podcastsList', JSON.stringify(this.savedPodcasts));
+        console.log('closeAddPanel', );
+        this.$emit('closeAddPanel', true)
 
         // this.$emit('removePodcast');
     },
@@ -139,5 +141,6 @@ export default {
 
 
 <style scoped>
+
 
 </style>
