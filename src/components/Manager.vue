@@ -27,14 +27,24 @@
 
         <div class="pane list-pane">
 
-          <Publications @addEpisode="addEpisode" :added="addedPodcast" @playEpisode="playEpisode" @closeAddPanel="onCloseAddPanel"/>
+          <ul class="lists-switch">
+            <li><button v-on:click="activeList = 'channels'">Channels</button></li>
+            <li><button v-on:click="activeList = 'playlists'">Playlists</button></li>
+          </ul>
 
-          <Playlists :addedEpisode="addedEpisode" @playEpisode="playEpisode"/>
+          <div class="lists" v-bind:class="activeList">
+            <div class="list channels">
+              <Publications @addEpisode="addEpisode" :added="addedPodcast" @playEpisode="playEpisode" @closeAddPanel="onCloseAddPanel"/>
+            </div>
+            <div class="list playlists">
+              <Playlists :addedEpisode="addedEpisode" @playEpisode="playEpisode"/>
+            </div>
+          </div>
 
         </div>
 
         <div class="pane player-pane" v-bind:class="{ open: playedEpisode !== null }">
-          <Player :playedEpisode="playedEpisode"/>
+          <Player :playedEpisode="playedEpisode" @removeLoadedEpisode="onRemovePlayingEpisode"/>
         </div>
 
       </div>
@@ -67,7 +77,8 @@ export default {
       playedEpisode: null,
       isAddOpen: false,
       isSettingsOpen: false,
-      isDarkMode: null
+      isDarkMode: null,
+      activeList: 'channels'
     }
   },
   methods: {
@@ -88,6 +99,9 @@ export default {
     },
     onToggleDarkMode (value) {
       this.isDarkMode = value;
+    },
+    onRemovePlayingEpisode (value) {
+      this.playedEpisode = null
     }
   }
 }
@@ -114,12 +128,14 @@ export default {
 
 .panes {
   display: flex;
-  height: calc(100vh - 30px);
+  height: calc(100vh - 15px);
+  overflow: hidden;
 }
 
 .pane {
   flex: 0 0 calc(50% - 30px);
-  padding: 15px;
+  margin: 0 15px 15px;
+  overflow: hidden;
 }
 
 .list-pane {
@@ -135,6 +151,43 @@ export default {
     bottom: 0;
     width: 100%;
     height: 50px;
+
+    &.open {
+      background-color: green;
+    }
+  }
+}
+
+.lists-switch {
+  display: flex;
+
+  li {
+    width: 50%;
+    margin: 0;
+	  height: 30px;
+
+    button {
+      border: none;
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+
+.lists {
+  background-color: green;
+  display: flex;
+  width: 200%;
+  transition: transform 0.3s;
+  height: calc(100% - 30px);
+
+  .list {
+    width: 50%;
+    overflow-x: hidden;
+  }
+
+  &.playlists {
+    	transform: translateX(-50%);
   }
 }
 

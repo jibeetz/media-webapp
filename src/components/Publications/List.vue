@@ -1,24 +1,35 @@
 <template>
-    <div>
+    <div v-bind:class="{ 'list-open': selectedPodcast !== null }">
+
         <h2>podcasts list</h2>
 
         <ul v-if="savedPodcasts.length">
           <li v-for="(savedPodcast, key) in savedPodcasts" :key="key">
             {{savedPodcast.title}}
             <button v-on:click="removePodcast(savedPodcast)">Remove</button>
-            <button v-on:click="showEpisodes(savedPodcast)">Show episodes</button>
+            <button v-on:click="toggleEpisodes(savedPodcast)">Toggle episodes</button>
             <button v-on:click="updatePodcast(savedPodcast)">Update podcast</button>
+
+            <ul class="episodes-list" v-show="listedEpisodes[convertToSlug(savedPodcast.title)]">
+              <li v-for="(episode, key) in savedPodcast.item" :key="key">
+                {{episode.title}}
+                <button v-on:click="$emit('addEpisode', {episode})">Add episode</button>
+                <button v-on:click="$emit('playEpisode', {episode})">Play episode</button>
+              </li>
+            </ul>
+
+            <!-- <ul v-if="selectedPodcast !== null && selectedPodcast === savedPodcast" class="episodes-list">
+              <li v-for="(episode, key) in selectedPodcast.item" :key="key">
+                {{episode.title}}
+                <button v-on:click="$emit('addEpisode', {episode})">Add episode</button>
+                <button v-on:click="$emit('playEpisode', {episode})">Play episode</button>
+              </li>
+            </ul> -->
+
           </li>
         </ul>
 
-        <button v-if="selectedPodcast !== null" v-on:click="hideEpisodes()">Hide episodes</button>
-        <ul v-if="selectedPodcast !== null">
-          <li v-for="(episode, key) in selectedPodcast.item" :key="key">
-            {{episode.title}}
-            <button v-on:click="$emit('addEpisode', {episode})">Add episode</button>
-            <button v-on:click="$emit('playEpisode', {episode})">Play episode</button>
-          </li>
-        </ul>
+
     </div>
 </template>
 
@@ -32,7 +43,8 @@ export default {
     return {
       savedPodcasts: [],
       selectedPodcast: null,
-      updatedPodcast: null
+      updatedPodcast: null,
+      listedEpisodes: {}
     }
   },
 
@@ -81,12 +93,10 @@ export default {
       }
 
     },
-    showEpisodes: function (podcast){
-      // console.log('showEpisodes', podcast);
-      this.selectedPodcast = podcast;
-    },
-    hideEpisodes: function(){
-      this.selectedPodcast = null;
+    toggleEpisodes: function (savedPodcast) {
+      let channelSlug = this.convertToSlug(savedPodcast.title);
+      let isDiplayed = (this.listedEpisodes[channelSlug]) ? false : true;
+      this.$set(this.listedEpisodes, channelSlug, isDiplayed);
     },
     updatePodcast: function(podcast){
 
@@ -129,6 +139,13 @@ export default {
         // }
 
       }
+    },
+    convertToSlug(text){
+      return text
+        .toLowerCase()
+        .replace(/[^\w ]+/g,'')
+        .replace(/ +/g,'-')
+        ;
     }
   },
   mounted: function () {
@@ -140,7 +157,10 @@ export default {
 </script>
 
 
-<style scoped>
+<style scoped lang="scss">
 
+.list-open {
+
+}
 
 </style>

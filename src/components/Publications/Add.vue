@@ -119,20 +119,24 @@ export default {
 .podcast_add {
   transition: all 0.3s;
   position: fixed;
-	top: -100vh;
+	transform: translateY(-100%);
   left: 0;
 	height: calc(100vh - 30px);
 	background: #fff;
-	width: 50%;
+	width: calc(50% - 30px);
   padding: 15px;
   overflow: hidden;
+
+  .dark & {
+    background-color: #2c3e50;
+  }
 
   @media screen  and (max-width: 768px)  {
     width: 100%;
   }
 
   &.open {
-    top: 0;
+    transform: translateY(0%);
   }
 
   .suggested {

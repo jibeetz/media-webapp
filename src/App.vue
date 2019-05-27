@@ -39,4 +39,14 @@ ul, li {
 li {
   list-style: none;
 }
+
+::-webkit-scrollbar {
+  background-color: #2c3e50;
+  width: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #666;
+  border-radius: 20px;
+}
 </style>

@@ -68,22 +68,27 @@ export default {
   width: calc(50% - 30px);
   height: calc(100vh - 30px);
   padding: 15px;
-  transition: right 0.3s, background-color 0.3s;
+  transition: transform 0.3s, background-color 0.3s;
   background: #f9f9f9;
   overflow: hidden;
-  right: -50%;
+  transform: translateX(200%);
+  z-index: 1;
 
   .dark & {
     background-color: #2c3e50;
   }
 
-  @media screen  and (max-width: 768px)  {
-    right: -100%;
-    width: calc(100% - 30px);
+  &.open {
+    transform: translateX(100%);
   }
 
-  &.open {
-    right: 0;
+  @media screen  and (max-width: 768px)  {
+    transform: translateX(100%);
+    width: calc(100% - 30px);
+
+    &.open {
+      transform: translateX(0%);
+    }
   }
 
 

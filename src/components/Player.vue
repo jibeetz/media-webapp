@@ -35,7 +35,8 @@ export default {
   props: ["playedEpisode"],
   watch: {
     playedEpisode: function(playedEpisode) {
-      this.playEpisode(playedEpisode.episode);
+      if(playedEpisode)
+        this.playEpisode(playedEpisode.episode);
     }
   },
 
@@ -82,6 +83,7 @@ export default {
       this.loadedEpisode = null;
       localStorage.setItem("loadedEpisode", null);
       this.playerView = null;
+      this.$emit('removeLoadedEpisode', true)
     },
     setupYoutube: function() {
       let tag = document.createElement("script");
